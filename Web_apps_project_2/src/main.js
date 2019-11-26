@@ -16,12 +16,19 @@ let app = new Vue({
         search(){
           this.status = "Finding Routes..."
         },
+        // This is used to get a selected location's value and fly to it
         locate(){
-            location = $( "#locations option:selected" ).text();
+            let data = document.querySelector("#locations");
+            // First you have to get the selected option
+            let option = data.options[data.selectedIndex];
+            // Then get the value
+            let location = option.value;
+            // Then split it
             let array = location.split(",");
-            let lngLat = mapboxgl.LngLat.convert(array);
+            // Then fly to
             map.flyTo({
-                center: array
+                center: [parseFloat(array[0]), parseFloat(array[1])],
+                zoom: 15
             });
         }
     }, 
