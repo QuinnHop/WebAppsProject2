@@ -5,11 +5,22 @@
     <meta name="viewport" content="initial-scale=1.0">
     <meta charset="utf-8">
     
+    <!-- Load required Bootstrap and BootstrapVue CSS -->
+    <link type="text/css" rel="stylesheet" href="https://unpkg.com/bootstrap/dist/css/bootstrap.min.css" />
+    <link type="text/css" rel="stylesheet" href="https://unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.min.css" />
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <!-- Load Vue followed by BootstrapVue -->
+    <script src="https://unpkg.com/vue@latest/dist/vue.min.js"></script>
+    <script src="https://unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.min.js"></script>
+
     <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v1.5.0/mapbox-gl.js'></script>
    
     <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v1.5.0/mapbox-gl.css' rel='stylesheet' />
     <script src="./src/loader.js" type="module"></script>
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+    <!--Embedded font-->
+    <link href="https://fonts.googleapis.com/css?family=Caveat&display=swap" rel="stylesheet">
+  
     <link rel="stylesheet" href="style.css">
   </head>
   <body>
@@ -23,13 +34,20 @@
                 <button @click="search">Search!</button>
             </p>
         </section>
-        <select>
-          <option id="parkPoint" selected>Park Point</option>
-          <option id="ritInn">Rit Inn</option>
-          <option id="province">Province</option>
+        <section>
+        <h2>Routes</h2>
+        <p>
+        <select id="locations">
+          <option id="parkPoint" value="[-77.658445, 43.091956]" selected>Park Point</option>
+          <option id="ritInn" value="[-77.658830, 43.046110]">Rit Inn</option>
+          <option id="province" value="[-77.660162, 43.077429]">Province</option>
         </select>
+        <button @click="locate">Go Here!</button>
+        </p>
+        </section>
         
     </div>
+    
     <section>
       <div id="map"></div>
    </section>

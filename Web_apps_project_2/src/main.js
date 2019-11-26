@@ -15,6 +15,14 @@ let app = new Vue({
     methods: {
         search(){
           this.status = "Finding Routes..."
+        },
+        locate(){
+            location = $( "#locations option:selected" ).text();
+            let array = location.split(",");
+            let lngLat = mapboxgl.LngLat.convert(array);
+            map.flyTo({
+                center: array
+            });
         }
     }, 
     created(){
