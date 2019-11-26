@@ -66,7 +66,7 @@ function createMarkers(data){
               type: 'Feature',
               geometry: {
                 type: 'Point',
-                coordinates: [data[i].location.lat, data[i].location.lng]
+                coordinates: [data[i].location.lng, data[i].location.lat]
               },
               properties: {
                 title: data[i].name,
