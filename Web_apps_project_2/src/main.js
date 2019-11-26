@@ -1,19 +1,35 @@
 import "./vue-component.js"
 
 let map;
+let location;
 
 function init(){
 let app = new Vue({
     el: '#app',
     data: {
-        title: "Map me",
+        title: "Bus Stop Finder",
         status: "Click Search button to get some results",
-        term: "map",
+        term: "",
         results: []
     },
     methods: {
         search(){
           this.status = "Finding Routes..."
+        },
+        // This is used to get a selected location's value and fly to it
+        locate(){
+            let data = document.querySelector("#locations");
+            // First you have to get the selected option
+            let option = data.options[data.selectedIndex];
+            // Then get the value
+            let location = option.value;
+            // Then split it
+            let array = location.split(",");
+            // Then fly to
+            map.flyTo({
+                center: [parseFloat(array[0]), parseFloat(array[1])],
+                zoom: 15
+            });
         }
     }, 
     created(){
@@ -26,9 +42,9 @@ let app = new Vue({
 function initMap(){
     mapboxgl.accessToken = 'pk.eyJ1IjoicXBoNjQxMiIsImEiOiJjazM5N2RhcTUwMDN2M2dxb2p4aXU1bmEyIn0.ZIEer8pQ-1c556RVxIOO2Q';
     map = new mapboxgl.Map({
-    container: 'map', // container id
-    style: 'mapbox://styles/mapbox/streets-v11' // stylesheet location
-});
+        container: 'map', // container id
+        style: 'mapbox://styles/mapbox/streets-v11' // stylesheet location
+    });
     //this adds a button to the map that will locate the user
     map.addControl(new mapboxgl.GeolocateControl({
         positionOptions: {
@@ -37,7 +53,30 @@ function initMap(){
         trackUserLocation: true
     }));
     
+    // Code that will give us the user's location that we can then use for the route
+    let options = {
+        enableHighAccuracy: true,
+        timeout: 5000,
+        maximumAge: 0
+      };
+      
+    function success(pos) {
+        let crd = pos.coords;
+      
+        console.log('Your current position is:');
+        console.log(`Latitude : ${crd.latitude}`);
+        console.log(`Longitude: ${crd.longitude}`);
+        console.log(`More or less ${crd.accuracy} meters.`);
+        location = [crd.latitude, crd.latitude];
+    }
+      
+    function error(err) {
+        console.warn(`ERROR(${err.code}): ${err.message}`);
+    }
+      
+    navigator.geolocation.getCurrentPosition(success, error, options);
 }
+
 function getRouteData(){
     fetch("https://transloc-api-1-2.p.rapidapi.com/stops.json?agencies=16&callback=call", {
 	"method": "GET",
