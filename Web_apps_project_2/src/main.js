@@ -12,7 +12,7 @@ app = new Vue({
         status: "Click Search button to get some results",
         term: "",
         results: [],
-        searchRadius: 1000
+        searchRadius: "100"
     },
     methods: {
         search(){
@@ -94,7 +94,7 @@ app = new Vue({
         })
         .then((responseData) =>{
             //console.log(responseData);
-            createMarkers(responseData.data)
+            app.createMarkers(responseData.data)
         })
         .catch(err => {
             console.log(err);
@@ -164,11 +164,8 @@ app = new Vue({
     }, 
     created(){
         this.initMap();
-        //map.on('load', getAgencies(location, searchRadius));
-        //getRouteData(location, searchRadius);
-        
     }
-})
+});
 }
 
 

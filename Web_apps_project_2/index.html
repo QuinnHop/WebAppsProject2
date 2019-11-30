@@ -35,18 +35,20 @@
             </p>
         </section>
         <section>
-        <h2>Locations(Soon to be routes)</h2>
-        <p>
-        <select id="locations">
-          <option id="parkPoint" value="-77.658445, 43.091956" selected>Park Point</option>
-          <option id="ritInn" value="-77.658830, 43.046110">Rit Inn</option>
-          <option id="province" value="-77.660162, 43.077429">Province</option>
-        </select>
-        <select v-model="searchRadius" @change="getAgencies({{location}}, {{searchRadius}})">Search Radius: 
-          <option id="small" value="1000">1000 Meters</option>
-          <option id="medium" value="3000">3000 Meters</option>
-          <option id="large" value="10000">10,000 meters</option>
-        </select>
+          <h2>Locations(Soon to be routes)</h2>
+          <p>
+          <select id="locations">
+            <option id="parkPoint" value="-77.658445, 43.091956" selected>Park Point</option>
+            <option id="ritInn" value="-77.658830, 43.046110">Rit Inn</option>
+            <option id="province" value="-77.660162, 43.077429">Province</option>
+          </select>
+        </section>
+        <section>
+          <select v-model="searchRadius" @change="getAgencies({{location}}, {{searchRadius}})">Search Radius: 
+            <option id="small" value="1000">1000 Meters</option>
+            <option id="medium" value="3000">3000 Meters</option>
+            <option id="large" value="10000">10,000 meters</option>
+          </select>
         <p>{{searchRadius}}</p>
         <button @click="locate">Go Here!</button>
         </p>
@@ -56,6 +58,6 @@
     
     <section>
       <div id="map"></div>
-   </section>
+    </section>
   </body>
 </html>
