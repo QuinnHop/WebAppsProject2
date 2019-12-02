@@ -94,7 +94,7 @@ app = new Vue({
         })
         .then((responseData) =>{
             //console.log(responseData);
-            createMarkers(responseData.data)
+            app.createMarkers(responseData.data)
         })
         .catch(err => {
             console.log(err);
