@@ -83,10 +83,10 @@ app = new Vue({
         
             for(let i = 0; i < agencies.length; i++){
                 url+= agencies[i];
+            
+                if(agencies.length > 1 && i < agencies.length-1)
+                    url += "%2C"; //adds a split between the terms if it is needed
             }
-            if(agencies.length > 1 && i < agencies.length-1)
-                url += "%"; //adds a split between the terms if it is needed
-        
             fetch(url, {
             "method": "GET",
             "headers": {
