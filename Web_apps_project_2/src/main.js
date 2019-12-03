@@ -178,6 +178,8 @@ app = new Vue({
     }, 
     created(){
         this.initMap();
+        this.locate();
+        
     }
 });
 }
