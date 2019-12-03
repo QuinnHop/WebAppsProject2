@@ -12,7 +12,7 @@ app = new Vue({
         status: "Click Search button to get some results",
         term: "",
         results: [],
-        searchRadius: "100"
+        searchRadius: "1000"
     },
     methods: {
         search(){
@@ -73,7 +73,7 @@ app = new Vue({
         },
         
         getRouteData(location, radius){
-            let url = `https://transloc-api-1-2.p.rapidapi.com/stops.json?&callback=call&geo_area=${location[0]},${location[1]}|${radius}&agencies=`;
+            let url = `https://transloc-api-1-2.p.rapidapi.com/stops.json?&callback=call&geo_area=${location[0]},${location[1]}|${this.searchRadius}&agencies=`;
             
         
             for(let i = 0; i < agencies.length; i++){
@@ -86,7 +86,7 @@ app = new Vue({
             "method": "GET",
             "headers": {
                 "x-rapidapi-host": "transloc-api-1-2.p.rapidapi.com",
-                "x-rapidapi-key": "3d8d97d83amsh33d9e9295dfe7d5p190b02jsnff2d088324da"
+                "x-rapidapi-key": "9456d85263msh248beac628b1779p1a5a58jsn16e851de941e"
             }
         })
         .then(response => {
@@ -108,7 +108,7 @@ app = new Vue({
             "method": "GET",
             "headers": {
                 "x-rapidapi-host": "transloc-api-1-2.p.rapidapi.com",
-                "x-rapidapi-key": "3d8d97d83amsh33d9e9295dfe7d5p190b02jsnff2d088324da"
+                "x-rapidapi-key": "9456d85263msh248beac628b1779p1a5a58jsn16e851de941e"
             }
         })
         .then(response => {
@@ -116,6 +116,10 @@ app = new Vue({
         })
         .then((responseData) =>{
             agencies = [];//clear agencies list
+            if(responseData.data.length == 0) {
+                console.log("no agencies within bounds"); 
+                return;
+            }
             //add all the agencies retreived from the location
             for(let i =0; i < responseData.data.length; i++){
                 agencies.push(responseData.data[i].agency_id);
@@ -126,6 +130,7 @@ app = new Vue({
             console.log(err);
         });
         },
+
         createMarkers(data){
             let markers = new Array();
             for(let i = 0; i < data.length; i++){
