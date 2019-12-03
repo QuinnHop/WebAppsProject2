@@ -16,6 +16,9 @@
     <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v1.5.0/mapbox-gl.js'></script>
    
     <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v1.5.0/mapbox-gl.css' rel='stylesheet' />
+
+    <script src='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.2.0/mapbox-gl-geocoder.min.js'></script>
+    <link rel='stylesheet' href='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.2.0/mapbox-gl-geocoder.css' type='text/css' />
     <script src="./src/loader.js" type="module"></script>
     <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
     <!--Embedded font-->
@@ -26,16 +29,8 @@
   <body>
     <div id="app">
         <h1>{{title}}</h1>
-
-        <section id="controls">
-            <p>{{status}}</p>
-            <p>
-                <input type="text" placeholder="Take me home" v-model="term">
-                <button @click="search">Search!</button>
-            </p>
-        </section>
         <section>
-        <h2>Locations(Soon to be routes)</h2>
+        <h2>Choose your route, search distance, and press the button to find the closest stop to you!</h2>
         <p>
         <select id="locations">
           <option id="parkPoint" value="-77.658445, 43.091956" selected>Park Point</option>
@@ -44,11 +39,10 @@
         </select>
         <select v-model="searchRadius" @change="getAgencies">Search Radius: 
           <option id="small" value="1000">1000 Meters</option>
-          <option id="medium" value="3000">3000 Meters</option>
-          <option id="large" value="10000">10,000 meters</option>
+          <option id="medium" value="2000">2000 Meters</option>
+          <option id="large" value="5000">5000 meters</option>
         </select>
-        <p>{{searchRadius}}</p>
-        <button @click="locate">Go Here!</button>
+        <button @click="locate">FIND!</button>
         </p>
         </section>
         

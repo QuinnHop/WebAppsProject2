@@ -15,9 +15,6 @@ app = new Vue({
         searchRadius: "1000"
     },
     methods: {
-        search(){
-          this.status = "Finding Routes..."
-        },
         // This is used to get a selected location's value and fly to it
         locate(){
             let data = document.querySelector("#locations");
@@ -37,7 +34,7 @@ app = new Vue({
             mapboxgl.accessToken = 'pk.eyJ1IjoicXBoNjQxMiIsImEiOiJjazM5N2RhcTUwMDN2M2dxb2p4aXU1bmEyIn0.ZIEer8pQ-1c556RVxIOO2Q';
             map = new mapboxgl.Map({
                 container: 'map', // container id
-                style: 'mapbox://styles/mapbox/streets-v11' // stylesheet location
+                style: 'mapbox://styles/mapbox/satellite-streets-v11' // stylesheet location
             });
             //this adds a button to the map that will locate the user
             map.addControl(new mapboxgl.GeolocateControl({
@@ -70,6 +67,14 @@ app = new Vue({
             }
               
             navigator.geolocation.getCurrentPosition(success, error, options);
+
+            let geocoder = new MapboxGeocoder({
+                accessToken: mapboxgl.accessToken,
+                mapboxgl: mapboxgl,
+                marker: false
+            });
+            
+            map.addControl(geocoder);
         },
         
         getRouteData(){
@@ -132,6 +137,10 @@ app = new Vue({
         },
 
         createMarkers(data){
+            // Clear all markers
+            $( ".marker" ).remove();
+            
+            // Make new markers
             let markers = new Array();
             for(let i = 0; i < data.length; i++){
                 let geojson = {
@@ -172,6 +181,8 @@ app = new Vue({
     }
 });
 }
+
+
 
 
 export {init}
