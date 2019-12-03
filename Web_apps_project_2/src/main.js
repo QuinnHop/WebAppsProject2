@@ -72,7 +72,7 @@ app = new Vue({
             navigator.geolocation.getCurrentPosition(success, error, options);
         },
         
-        getRouteData(location, radius){
+        getRouteData(){
             let url = `https://transloc-api-1-2.p.rapidapi.com/stops.json?&callback=call&geo_area=${location[0]},${location[1]}|${this.searchRadius}&agencies=`;
             
         
@@ -103,8 +103,8 @@ app = new Vue({
         
         //this will allow you to get the agencies functioning in the area
         //35.80176, -78.64347 |75.5
-        getAgencies(location, radius){
-            fetch(`https://transloc-api-1-2.p.rapidapi.com/agencies.json?callback=call&geo_area=${location[0]},${location[1]}|${radius}`, {
+        getAgencies(){
+            fetch(`https://transloc-api-1-2.p.rapidapi.com/agencies.json?callback=call&geo_area=${location[0]},${location[1]}|${this.searchRadius}`, {
             "method": "GET",
             "headers": {
                 "x-rapidapi-host": "transloc-api-1-2.p.rapidapi.com",

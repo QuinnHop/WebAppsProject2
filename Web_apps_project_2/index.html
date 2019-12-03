@@ -42,7 +42,7 @@
           <option id="ritInn" value="-77.658830, 43.046110">Rit Inn</option>
           <option id="province" value="-77.660162, 43.077429">Province</option>
         </select>
-        <select v-model="searchRadius" @change="getAgencies(this.location, this.value)">Search Radius: 
+        <select v-model="searchRadius" @change="getAgencies">Search Radius: 
           <option id="small" value="1000">1000 Meters</option>
           <option id="medium" value="3000">3000 Meters</option>
           <option id="large" value="10000">10,000 meters</option>
