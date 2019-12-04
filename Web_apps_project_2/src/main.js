@@ -1,5 +1,5 @@
 import "./vue-component.js"
-
+import {result} from "./classes.js"
 let map;
 let location = [];
 let agencies = [];//stores the agencies active in the searched areas
@@ -17,18 +17,17 @@ app = new Vue({
     methods: {
         // This is used to get a selected location's value and fly to it
         locate(){
-            let data = document.querySelector("#locations");
-            // First you have to get the selected option
-            let option = data.options[data.selectedIndex];
-            // Then get the value
-            let location = option.value;
-            // Then split it
-            let array = location.split(",");
+            
+            let tempLocation = map.getCenter();
+            location[0] = tempLocation.lng;
+            location[1] = tempLocation.lat;
+            
             // Then fly to
             map.flyTo({
-                center: [parseFloat(array[0]), parseFloat(array[1])],
+                center: [location[0], location[1]],
                 zoom: 15
             });
+            app.getAgencies(location, app.searchRadius);
         },
         initMap(){
             mapboxgl.accessToken = 'pk.eyJ1IjoicXBoNjQxMiIsImEiOiJjazM5N2RhcTUwMDN2M2dxb2p4aXU1bmEyIn0.ZIEer8pQ-1c556RVxIOO2Q';
@@ -58,7 +57,13 @@ app = new Vue({
                 console.log(`Latitude : ${crd.latitude}`);
                 console.log(`Longitude: ${crd.longitude}`);
                 console.log(`More or less ${crd.accuracy} meters.`);
-                location = [crd.latitude, crd.longitude];
+                location[0] = [crd.latitude];
+                location[1] =  [crd.longitude];
+                map.flyTo({
+                    center: [location[1], location[0]],
+                    zoom: 15
+                });
+
                 app.getAgencies(location, app.searchRadius);
             }
               
@@ -68,13 +73,6 @@ app = new Vue({
               
             navigator.geolocation.getCurrentPosition(success, error, options);
 
-            let geocoder = new MapboxGeocoder({
-                accessToken: mapboxgl.accessToken,
-                mapboxgl: mapboxgl,
-                marker: false
-            });
-            
-            map.addControl(geocoder);
         },
         
         getRouteData(){
@@ -99,7 +97,8 @@ app = new Vue({
         })
         .then((responseData) =>{
             //console.log(responseData);
-            app.createMarkers(responseData.data)
+            app.createMarkers(responseData.data);
+            app.generateResults(responseData);
         })
         .catch(err => {
             console.log(err);
@@ -174,11 +173,25 @@ app = new Vue({
                 .setHTML('<h3>' + marker.features[0].properties.title + '</h3>'))
                 .addTo(map);
             }
+        },
+        generateResults(routeObject){
+            console.log(routeObject);
+            this.results = [];
+            for(let i = 0; i < routeObject.data.length; i++){
+                let newResult = new result();
+                newResult.name = routeObject.data[i].name;
+                newResult.agency = routeObject.data[i].long_name;
+                newResult.route_id = routeObject.data[i].route_id;
+                
+                this.results.push(newResult);
+            }
+            console.log(app.results);
+            
         }
     }, 
     created(){
         this.initMap();
-        this.locate();
+        
         
     }
 });
