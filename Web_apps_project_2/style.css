@@ -1,4 +1,7 @@
-#map { width: 1200px; height:900px;}
+#map { 
+  width: 100%; 
+  height:600%;
+}
     
 .marker {
   background-image: url('mapbox-icon.png');
@@ -23,7 +26,7 @@ html{
 body {
   background: #203b51;
   color: #daebfa;
-  width: 40%;
+  width: 100%;
   font-family: 'Caveat', cursive;
   margin: 1em;
 }

@@ -27,29 +27,34 @@
    <link rel="stylesheet" href="./style.css">
   </head>
   <body>
-    <div id="app">
-        <h1>{{title}}</h1>
-        <section>
-        <h2>Choose your route, search distance, and press the button to find the closest stop to you!</h2>
-        <p>
-        <select id="locations">
-          <option id="parkPoint" value="-77.658445, 43.091956" selected>Park Point</option>
-          <option id="ritInn" value="-77.658830, 43.046110">Rit Inn</option>
-          <option id="province" value="-77.660162, 43.077429">Province</option>
-        </select>
-        <select v-model="searchRadius" @change="getAgencies">Search Radius: 
-          <option id="small" value="1000">1000 Meters</option>
-          <option id="medium" value="2000">2000 Meters</option>
-          <option id="large" value="5000">5000 meters</option>
-        </select>
-        <button @click="locate">FIND!</button>
-        </p>
-        </section>
-        
-    </div>
-    
-    <section>
-      <div id="map"></div>
-   </section> 
+      <div class="row">
+        <div class="col">
+          <div id="map"></div>
+        </div> 
+
+        <div id="app" class="col-lg-4">
+          <section>
+          <h2>Choose your route, search distance, and press the button to find the closest stop to you!</h2>
+          <p>
+          <select id="locations">
+            <option id="parkPoint" value="-77.658445, 43.091956">Park Point</option>
+            <option id="ritInn" value="-77.658830, 43.046110">Rit Inn</option>
+            <option id="province" value="-77.660162, 43.077429">Province</option>
+            <option id="current" value="current" selected>Current Location</option>
+          </select>
+          <select v-model="searchRadius" @change="getAgencies">Search Radius: 
+            <option id="small" value="1000">1000 Meters</option>
+            <option id="medium" value="2000">2000 Meters</option>
+            <option id="large" value="5000">5000 meters</option>
+          </select>
+          <button @click="locate">FIND!</button>
+          </p>
+          </section>
+        </div>
+
+        <div id="results" class="col-lg-2">
+          <h2>Results</h2>
+        </div>
+      </div>
   </body>
 </html>
