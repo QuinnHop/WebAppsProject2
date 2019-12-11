@@ -2,6 +2,7 @@ import "./vue-component.js"
 import {result} from "./classes.js"
 let map;
 let location = [];
+let current = [];
 let agencies = [];//stores the agencies active in the searched areas
 let app;
 function init(){
@@ -12,15 +13,31 @@ app = new Vue({
         status: "Click Search button to get some results",
         term: "",
         results: [],
-        searchRadius: "1000"
+        searchRadius: "1000",
+        selected: "current",
+        selectedLocation: [
+            {text: 'Park Point', value: '-77.658445, 43.091956'},
+            {text: 'RIT Inn', value: '-77.658830, 43.046110'},
+            {text: 'Province', value: '-77.660162, 43.077429'},
+            {text: 'Current Location', value: 'current'}
+        ]
     },
     methods: {
         // This is used to get a selected location's value and fly to it
         locate(){
-            
-            let tempLocation = map.getCenter();
-            location[0] = tempLocation.lng;
-            location[1] = tempLocation.lat;
+            let value = this.selected;
+            if(value == "current"){
+                location[0] = current[1];
+                location[1] = current[0];
+            }
+
+            else{
+                let array = value.split(",");
+                location[0] = parseFloat(array[0]);
+                location[1] = parseFloat(array[1]);
+            }
+
+            console.log(location[0] + ", " + location[1]);
             
             // Then fly to
             map.flyTo({
@@ -59,6 +76,8 @@ app = new Vue({
                 console.log(`More or less ${crd.accuracy} meters.`);
                 location[0] = [crd.latitude];
                 location[1] =  [crd.longitude];
+                current[0] = location[0];
+                current[1] = location[1];
                 map.flyTo({
                     center: [location[1], location[0]],
                     zoom: 15
