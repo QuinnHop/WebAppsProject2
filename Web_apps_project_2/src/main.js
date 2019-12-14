@@ -152,6 +152,22 @@ app = new Vue({
         });
         },
 
+        getArrivalTimes(){
+            fetch("https://transloc-api-1-2.p.rapidapi.com/agencies.json?agencies=12&callback=call&geo_area=35.80176%252C-78.64347%257C35.78061%252C-78.68218", {
+            	"method": "GET",
+        	    "headers": {
+    	        	"x-rapidapi-host": "transloc-api-1-2.p.rapidapi.com",
+    		        "x-rapidapi-key": "9456d85263msh248beac628b1779p1a5a58jsn16e851de941e"
+	            }
+            })
+            .then(response => {
+	            console.log(response);
+            })
+            .catch(err => {
+	            console.log(err);
+            });
+        },
+
         createMarkers(data){
             // Clear all markers
             $( ".marker" ).remove();
