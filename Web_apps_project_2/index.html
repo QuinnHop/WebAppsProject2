@@ -37,8 +37,8 @@
           <h2>Choose your route, search distance, and press the button to find the closest stop to you!</h2>
           <p>
           <select v-model="selected" id="locations">
-            <option v-for="location in selectedLocation" v-bind:value="location.value">
-              {{ location.text }}
+            <option v-for="option in options" v-bind:value="option.value">
+              {{ option.text }}
             </option>
           </select>
           <select v-model="searchRadius" @change="getAgencies">Search Radius: 
@@ -53,6 +53,9 @@
 
         <div id="results" class="col-lg-3">
           <h2>Results</h2>
+          <ul>
+            <li v-for="marker in results">{{ marker.name }}</li>
+          </ul>
         </div>
       </div>
   </body>

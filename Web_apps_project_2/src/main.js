@@ -14,8 +14,8 @@ app = new Vue({
         term: "",
         results: [],
         searchRadius: "1000",
-        selected: "current",
-        selectedLocation: [
+        selected: 'current',
+        options: [
             {text: 'Park Point', value: '-77.658445, 43.091956'},
             {text: 'RIT Inn', value: '-77.658830, 43.046110'},
             {text: 'Province', value: '-77.660162, 43.077429'},
@@ -36,8 +36,6 @@ app = new Vue({
                 location[0] = parseFloat(array[0]);
                 location[1] = parseFloat(array[1]);
             }
-
-            console.log(location[0] + ", " + location[1]);
             
             // Then fly to
             map.flyTo({
@@ -95,7 +93,7 @@ app = new Vue({
         },
         
         getRouteData(){
-            let url = `https://transloc-api-1-2.p.rapidapi.com/stops.json?&callback=call&geo_area=${location[0]},${location[1]}|${this.searchRadius}&agencies=`;
+            let url = `https://transloc-api-1-2.p.rapidapi.com/stops.json?&callback=call&geo_area=${location[1]},${location[0]}|${this.searchRadius}&agencies=`;
             
         
             for(let i = 0; i < agencies.length; i++){
@@ -127,7 +125,7 @@ app = new Vue({
         //this will allow you to get the agencies functioning in the area
         //35.80176, -78.64347 |75.5
         getAgencies(){
-            fetch(`https://transloc-api-1-2.p.rapidapi.com/agencies.json?callback=call&geo_area=${location[0]},${location[1]}|${this.searchRadius}`, {
+            fetch(`https://transloc-api-1-2.p.rapidapi.com/agencies.json?callback=call&geo_area=${location[1]},${location[0]}|${this.searchRadius}`, {
             "method": "GET",
             "headers": {
                 "x-rapidapi-host": "transloc-api-1-2.p.rapidapi.com",
