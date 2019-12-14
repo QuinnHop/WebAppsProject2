@@ -153,18 +153,54 @@ app = new Vue({
         },
 
         getArrivalTimes(){
-            fetch("https://transloc-api-1-2.p.rapidapi.com/agencies.json?agencies=12&callback=call&geo_area=35.80176%252C-78.64347%257C35.78061%252C-78.68218", {
-            	"method": "GET",
-        	    "headers": {
-    	        	"x-rapidapi-host": "transloc-api-1-2.p.rapidapi.com",
-    		        "x-rapidapi-key": "9456d85263msh248beac628b1779p1a5a58jsn16e851de941e"
+            let url = "https://transloc-api-1-2.p.rapidapi.com/arrival-estimates.json?routes=";
+            // Add the routes
+            for(let i  = 0; i < results.length; i++){
+                console.log("route");
+                url += results[i].route_id;
+
+                if(results.length > 1 && i < results.length-1){
+                    url += "%2C"; //adds a split between the terms if it is needed
+                }
+            }
+
+            // Add the stops
+            url += "&stops=";
+            for(let i  = 0; i < results.length; i++){
+                url += results[i].stop_id;
+
+                if(results.length > 1 && i < results.length-1){
+                    url += "%2C"; //adds a split between the terms if it is needed
+                }
+            }
+
+            // Add agencies
+            url += "&callback=call&agencies=";
+            for(let i = 0; i < agencies.length; i++){
+                url+= agencies[i];
+            
+                if(agencies.length > 1 && i < agencies.length-1)
+                    url += "%2C"; //adds a split between the terms if it is needed
+            }
+
+            fetch(url, {
+	            "method": "GET",
+	            "headers": {
+	            	"x-rapidapi-host": "transloc-api-1-2.p.rapidapi.com",
+	            	"x-rapidapi-key": "9456d85263msh248beac628b1779p1a5a58jsn16e851de941e"
 	            }
             })
+
             .then(response => {
-	            console.log(response);
+            	console.log(response);
+            })
+            .then((responseData) =>{
+                for(let i = 0; i < responseData.data.length; i ++){
+                    results[i].arrivalTime = responseData.data[i].arrival_at;
+                }
             })
             .catch(err => {
-	            console.log(err);
+            	console.log(err);
             });
         },
 
@@ -215,10 +251,13 @@ app = new Vue({
                 newResult.name = routeObject.data[i].name;
                 newResult.agency = routeObject.data[i].long_name;
                 newResult.route_id = routeObject.data[i].route_id;
+                newResult.stop_id = routeObject.data[i].stop_id;
                 
                 this.results.push(newResult);
             }
             console.log(app.results);
+
+            this.getArrivalTimes();
             
         }
     }, 
