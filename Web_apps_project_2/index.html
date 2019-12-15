@@ -19,6 +19,13 @@
 
     <script src='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.2.0/mapbox-gl-geocoder.min.js'></script>
     <link rel='stylesheet' href='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.2.0/mapbox-gl-geocoder.css' type='text/css' />
+
+    <!-- The core Firebase JS SDK is always required and must be listed first -->
+    <script src="https://www.gstatic.com/firebasejs/7.5.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.5.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.5.0/firebase-database.js"></script>
+    
+
     <script src="./src/loader.js" type="module"></script>
     <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
     <!--Embedded font-->
@@ -52,10 +59,13 @@
           <h2>Results</h2>
           <div id="resultBox" v-for="result in results" class="col-lg-3" >
             <bus-result-success v-bind:result="result"></bus-result-success>
-              
           </div>
         </div>
         
       </div>
+      <script>
+      
+      
+      </script>
   </body>
 </html>

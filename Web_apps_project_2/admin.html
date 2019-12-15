@@ -5,52 +5,86 @@
 	<title>Firebase Admin</title>
 </head>
 <body>
-<h1>User Data</h1>
-<h1 id="users">Users:</h1>
-<ol id="scoresList" v-for="user in users">
-    <li v-bind:user="user"></li>
-</ol>
+<div id="app">
+   <h1>User Data</h1>
+    <h1 id="usersArea">Users:</h1>
+    <ol id="scoresList" v-for="user in users">
+        <li>
+            <div>
+                <h3>User: </h3>
+                <p>Access Date: {user.accessDate}</p>
+                <p>Position: {user.position}</p>
+                <p>Search Radius: {user.searchRadius}</p>
+            </div>
+        </li>
+
+    </ol>
+</div>
+
 
 <!-- #1 - link to Firebase goes here  -->
 <!-- The core Firebase JS SDK is always required and must be listed first -->
-<script src="https://www.gstatic.com/firebasejs/7.5.0/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/7.5.0/firebase-auth.js"></script>
-<script src="https://www.gstatic.com/firebasejs/7.5.0/firebase-database.js"></script>
+
+<script src="https://www.gstatic.com/firebasejs/7.6.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/7.6.0/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/7.6.0/firebase-database.js"></script>
+
+<!-- Load Vue followed by BootstrapVue -->
+<script src="https://unpkg.com/vue@latest/dist/vue.min.js"></script>
+<script src="https://unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.min.js"></script>
+
 
 <!-- development version, includes helpful console warnings -->
 <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
-<script  src="./src/main.js" type="module"></script>
+<script type="module"></script>
 <script>
     
-
-
-    /* #2 - The rest of the Firebase setup code goes here */
-    var firebaseConfig = {
-    apiKey: "AIzaSyDb9VQL79m1DzT7fJtc-OS05yLwUZDP9ME",
-    authDomain: "rit-route-finder.firebaseapp.com",
-    databaseURL: "https://rit-route-finder.firebaseio.com",
-    projectId: "rit-route-finder",
-    storageBucket: "rit-route-finder.appspot.com",
-    messagingSenderId: "243604851524",
-    appId: "1:243604851524:web:be22d86cde7d21cb66e511"
-    };
-        // Initialize Firebase
-    firebase.initializeApp(firebaseConfig);
-    console.log(firebase); // #3 - make sure firebase is loaded
+    let Users = [];
+    let app = new Vue({
+        el: '#app',
+        data: {
+            users: []
+        },
+        created(){
+            /* #2 - The rest of the Firebase setup code goes here */
+            var firebaseConfig = {
+            apiKey: "AIzaSyDb9VQL79m1DzT7fJtc-OS05yLwUZDP9ME",
+            authDomain: "rit-route-finder.firebaseapp.com",
+            databaseURL: "https://rit-route-finder.firebaseio.com",
+            projectId: "rit-route-finder",
+            storageBucket: "rit-route-finder.appspot.com",
+            messagingSenderId: "243604851524",
+            appId: "1:243604851524:web:be22d86cde7d21cb66e511"
+            };
+                // Initialize Firebase
+            firebase.initializeApp(firebaseConfig);
+            console.log(firebase); // #3 - make sure firebase is loaded
+                
+            // #4 This is where the magic happens!
+            firebase.database().ref("users").on("value", dataChanged, firebaseError);
+            
+            function dataChanged(data){
+                let obj = data.val();
+                
+                Object.keys(obj).forEach(function (item) {
+                Users.push(obj[item]);
+                });
+                
+            
+            }
         
-    // #4 This is where the magic happens!
-    firebase.database().ref("users").on("value", dataChanged, firebaseError);
+                
+            function firebaseError(error){
+                console.log(error);
+            }
+            app.data.users = Users;
+        }
+});
+
+
     
-    function dataChanged(data){
-    let obj = data.val();
-    app.data.users = obj;
-    }
-   
-        
-    function firebaseError(error){
-        console.log(error);
-    }
 
+    
 </script>
 
 </body>

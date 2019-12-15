@@ -1,6 +1,7 @@
 import "./vue-component.js"
 import {result} from "./classes.js"
 let map;
+let d;
 let location = [];
 let current = [];
 let agencies = [];//stores the agencies active in the searched areas
@@ -42,6 +43,13 @@ app = new Vue({
                 center: [location[0], location[1]],
                 zoom: 15
             });
+            
+            firebase.database().ref('users').push({
+                accessDate: `${d.getDate()}/${d.getMonth()}/${d.getFullYear()}`,
+                position: `${location[0]}, ${location[1]}`,
+                seachRadius: app.searchRadius
+            });
+
             app.getAgencies(location, app.searchRadius);
         },
         initMap(){
@@ -254,7 +262,7 @@ app = new Vue({
                         app.results[i].isRunning = false;
                     else
                         app.results[i].isRunning = true;
-                        
+
                     console.log(app.results[i].arrivalTime);
                 }
             })
@@ -322,8 +330,30 @@ app = new Vue({
     created(){
         this.initMap();
         
-        
-    }
+        d = new Date();
+      /* #2 - The rest of the Firebase setup code goes here */
+      var firebaseConfig = {
+            apiKey: "AIzaSyDb9VQL79m1DzT7fJtc-OS05yLwUZDP9ME",
+            authDomain: "rit-route-finder.firebaseapp.com",
+            databaseURL: "https://rit-route-finder.firebaseio.com",
+            projectId: "rit-route-finder",
+            storageBucket: "rit-route-finder.appspot.com",
+            messagingSenderId: "243604851524",
+            appId: "1:243604851524:web:be22d86cde7d21cb66e511"
+      };
+      // Initialize Firebase
+      firebase.initializeApp(firebaseConfig);
+      console.log(firebase); // #3 - make sure firebase is loaded
+      //update the firebase server
+      let data = {
+        accessDate: `${d.getMonth()+1}/${d.getDate()}/${d.getFullYear()}`,
+        position: `2, 3`,
+        seachRadius: "3"
+      };
+      firebase.database().ref('users').push(data);
+          
+            
+     }
 });
 }
 
