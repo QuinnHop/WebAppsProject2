@@ -49,13 +49,13 @@
           <button @click="locate">FIND!</button>
           </p>
           </section>
-        </div>
-        <div id="resultBox" class="col-lg-3" >
           <h2>Results</h2>
-          <div v-for="result in results">
-            <bus-result v-bind:result="result"></bus-result>
+          <div id="resultBox" v-for="result in results" class="col-lg-3" >
+            <bus-result-success v-bind:result="result"></bus-result-success>
+              
           </div>
         </div>
+        
       </div>
   </body>
 </html>

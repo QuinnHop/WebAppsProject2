@@ -33,3 +33,6 @@ body {
 select{
   margin-bottom: 1em;
 }
+#resultBox{
+  color: #203b51;
+}

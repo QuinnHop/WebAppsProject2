@@ -250,6 +250,11 @@ app = new Vue({
                     let newArray = array.join("");
 
                     app.results[i].arrivalTime = newArray;
+                    if(app.results[i].arrivalTime == "")
+                        app.results[i].isRunning = false;
+                    else
+                        app.results[i].isRunning = true;
+                        
                     console.log(app.results[i].arrivalTime);
                 }
             })
