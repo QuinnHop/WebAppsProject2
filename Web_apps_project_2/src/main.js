@@ -143,7 +143,10 @@ app = new Vue({
             }
             //add all the agencies retreived from the location
             for(let i =0; i < responseData.data.length; i++){
-                agencies.push(responseData.data[i].agency_id);
+                //IMPORTANT: agency_id isn't actually a property, long_name will give us the agency (RIT) but then the program doesn't work
+                //for the time being just keep this part broken, we can fix it later
+                
+                agencies.push(responseData.data[i].agency_id); 
             }
             app.getRouteData(location, app.searchRadius);
         })
@@ -155,21 +158,31 @@ app = new Vue({
         getArrivalTimes(){
             let url = "https://transloc-api-1-2.p.rapidapi.com/arrival-estimates.json?routes=";
             // Add the routes
-            for(let i  = 0; i < results.length; i++){
-                console.log("route");
-                url += results[i].route_id;
 
-                if(results.length > 1 && i < results.length-1){
+            //create a set and add all the unique routes to it, then add the routes to the url
+            const uniqueRoutes = new Set();
+            for(let i  = 0; i < app.results.length; i++){
+                //loop through all the routes in route_id
+                for(let j = 0; j < app.results[i].route_id[j]; j++){
+                    uniqueRoutes.add(app.results[i].route_id[j]);
+                } 
+            }
+            //add each of the unique routes to the url
+            const iterable = uniqueRoutes.values();
+            for(let i = 0; i < uniqueRoutes.size; i++){
+                if(uniqueRoutes.size > 1 && i < uniqueRoutes.size-1){
                     url += "%2C"; //adds a split between the terms if it is needed
                 }
+                url += iterable.next().value;
             }
+            
 
             // Add the stops
             url += "&stops=";
-            for(let i  = 0; i < results.length; i++){
-                url += results[i].stop_id;
+            for(let i  = 0; i < app.results.length; i++){
+                url += app.results[i].stop_id;
 
-                if(results.length > 1 && i < results.length-1){
+                if(app.results.length > 1 && i < app.results.length-1){
                     url += "%2C"; //adds a split between the terms if it is needed
                 }
             }
@@ -197,7 +210,7 @@ app = new Vue({
             })
             .then((responseData) =>{
                 for(let i = 0; i < responseData.data.length; i ++){
-                    results[i].arrivalTime = responseData.data[i].arrival_at;
+                    app.results[i].arrivalTime = responseData.data[i].arrival_at;
                 }
             })
             .catch(err => {
@@ -246,19 +259,19 @@ app = new Vue({
         },
         generateResults(routeObject){
             console.log(routeObject);
-            this.results = [];
+            app.results = [];
             for(let i = 0; i < routeObject.data.length; i++){
                 let newResult = new result();
                 newResult.name = routeObject.data[i].name;
                 newResult.agency = routeObject.data[i].long_name;
-                newResult.route_id = routeObject.data[i].route_id;
+                newResult.route_id = routeObject.data[i].routes;
                 newResult.stop_id = routeObject.data[i].stop_id;
                 
-                this.results.push(newResult);
+                app.results.push(newResult);
             }
             console.log(app.results);
 
-            //this.getArrivalTimes();
+            this.getArrivalTimes();
             
         }
     }, 
