@@ -210,7 +210,47 @@ app = new Vue({
             })
             .then((responseData) =>{
                 for(let i = 0; i < responseData.data.length; i ++){
-                    app.results[i].arrivalTime = responseData.data[i].arrival_at;
+                    let temp = responseData.data[i].arrivals[0].arrival_at;
+                    let array = temp.split("");
+                    // Time to splice the array when it reaches the T
+                    let index;
+                    let otherIndex;
+                    for(let j = 0; j < array.length; j++){
+                        if(array[j] == "T"){
+                            index = j + 1;
+                        }
+                        if(array[j] == "-"){
+                            otherIndex = j - 3;
+                        }
+                    }
+                    // Then splice from the beginning until the index
+                    array.splice(otherIndex, array.length);
+                    array.splice(0,index);
+
+                    // Now we have to add AM or PM and make sure that it isn't in military time
+                    if(array[0] == "1"){
+                        if(parseInt(array[1]) > 2){
+                            array.push(" ");
+                            array.push("P");
+                            array.push("M");
+                            array[0] = "0";
+                            array[1] = (parseInt(array[1]) - 2);
+                        }
+                        else{
+                            array.push(" ");
+                            array.push("A");
+                            array.push("M");
+                        }
+                    }
+                    else{
+                        array.push(" ");
+                        array.push("A");
+                        array.push("M");
+                    }
+                    let newArray = array.join("");
+
+                    app.results[i].arrivalTime = newArray;
+                    console.log(app.results[i].arrivalTime);
                 }
             })
             .catch(err => {
