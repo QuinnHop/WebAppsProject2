@@ -314,10 +314,9 @@ app = new Vue({
                 
                 app.results.push(newResult);
             }
-            console.log(app.results);
 
             this.getArrivalTimes();
-            
+            console.log(app.results);
         }
     }, 
     created(){
