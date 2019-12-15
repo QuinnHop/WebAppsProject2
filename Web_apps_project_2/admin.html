@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8" />
+	<title>Firebase Admin</title>
+</head>
+<body>
+<h1>User Data</h1>
+<h1 id="users">Users:</h1>
+<ol id="scoresList" v-for="user in users">
+    <li v-bind:user="user"></li>
+</ol>
+
+<!-- #1 - link to Firebase goes here  -->
+<!-- The core Firebase JS SDK is always required and must be listed first -->
+<script src="https://www.gstatic.com/firebasejs/7.5.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/7.5.0/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/7.5.0/firebase-database.js"></script>
+
+<!-- development version, includes helpful console warnings -->
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script  src="./src/main.js" type="module"></script>
+<script>
+    
+
+
+    /* #2 - The rest of the Firebase setup code goes here */
+    var firebaseConfig = {
+    apiKey: "AIzaSyDb9VQL79m1DzT7fJtc-OS05yLwUZDP9ME",
+    authDomain: "rit-route-finder.firebaseapp.com",
+    databaseURL: "https://rit-route-finder.firebaseio.com",
+    projectId: "rit-route-finder",
+    storageBucket: "rit-route-finder.appspot.com",
+    messagingSenderId: "243604851524",
+    appId: "1:243604851524:web:be22d86cde7d21cb66e511"
+    };
+        // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+    console.log(firebase); // #3 - make sure firebase is loaded
+        
+    // #4 This is where the magic happens!
+    firebase.database().ref("users").on("value", dataChanged, firebaseError);
+    
+    function dataChanged(data){
+    let obj = data.val();
+    app.data.users = obj;
+    }
+   
+        
+    function firebaseError(error){
+        console.log(error);
+    }
+
+</script>
+
+</body>
+</html>

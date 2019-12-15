@@ -257,7 +257,7 @@ app = new Vue({
             }
             console.log(app.results);
 
-            this.getArrivalTimes();
+            //this.getArrivalTimes();
             
         }
     }, 
@@ -271,5 +271,5 @@ app = new Vue({
 
 
 
-
+export {app}
 export {init}
