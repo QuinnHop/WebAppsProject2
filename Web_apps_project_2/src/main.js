@@ -145,7 +145,7 @@ app = new Vue({
             for(let i =0; i < responseData.data.length; i++){
                 //IMPORTANT: agency_id isn't actually a property, long_name will give us the agency (RIT) but then the program doesn't work
                 //for the time being just keep this part broken, we can fix it later
-                
+
                 agencies.push(responseData.data[i].agency_id); 
             }
             app.getRouteData(location, app.searchRadius);
