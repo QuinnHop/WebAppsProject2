@@ -197,7 +197,7 @@ app = new Vue({
             })
             .then((responseData) =>{
                 for(let i = 0; i < responseData.data.length; i ++){
-                    results[i].arrivalTime = responseData.data[i].arrival_at;
+                    results[i].arrivalTime = responseData.data[i].arrivals.arrival_at;
                 }
             })
             .catch(err => {
