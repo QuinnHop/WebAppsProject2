@@ -260,6 +260,7 @@ app = new Vue({
                     app.results[i].arrivalTime = newArray;
                     if(app.results[i].arrivalTime == "")
                         app.results[i].isRunning = false;
+                    
                     else
                         app.results[i].isRunning = true;
 
