@@ -192,7 +192,8 @@ app = new Vue({
             })
 
             .then(response => {
-            	console.log(response);
+                console.log(response);
+                return response.json();
             })
             .then((responseData) =>{
                 for(let i = 0; i < responseData.data.length; i ++){
