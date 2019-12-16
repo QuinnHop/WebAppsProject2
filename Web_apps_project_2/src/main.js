@@ -250,6 +250,22 @@ app = new Vue({
                             array.push("M");
                         }
                     }
+                    else if(array[0] == "2"){
+                        if(parseInt(array[1]) < 2){
+                            array.push(" ");
+                            array.push("P");
+                            array.push("M");
+                            array[0] = "0";
+                            array[1] = (parseInt(array[1]) - 2);
+                        }
+                        else{
+                            array.push(" ");
+                            array.push("P");
+                            array.push("M");
+                            array[0] = "1";
+                            array[1] = (parseInt(array[1]) - 2);
+                        }
+                    }
                     else{
                         array.push(" ");
                         array.push("A");
