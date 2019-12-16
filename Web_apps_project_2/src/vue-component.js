@@ -6,15 +6,16 @@ export default Vue.component('bus-result-success',{
 	v-if="result.isRunning"
 	bg-variant="success"
 	text-variant="white"
-	class="col-lg-4"
+	class="col-lg-12"
+	style="margin-bottom:1em;"
 	>
-		<div style="margin-right:2em;" class="card-header">Arriving at: {{result.arrivalTime}}</div>
-		<div style="margin-right:2em;" class="card-body">
+		<div class="card-header">Arriving at: {{result.arrivalTime}}</div>
+		<div class="card-body">
 			<h5 class="card-title">{{result.name}}</h5>
 			<p >This Stop services routes: </p>
 			<span v-for="route in result.route_id">
 				<span>{{route}}</span>
-				<span v-if="result.route_id.length > 1">, </span>
+				<span v-if="result.route_id.length > 1" >, </span>
 			</span>
 		</div>
 	</b-card>
@@ -22,10 +23,11 @@ export default Vue.component('bus-result-success',{
 	v-else
 	bg-variant="danger"
 	text-variant="white"
-	class="col-lg-4"
+	class="col-lg-12"
+	style="margin-bottom:1em;"
 	>
-		<div style="margin-right:2em;" class="card-header">Arriving at: {{result.arrivalTime}}</div>
-		<div style="margin-right:2em;" class="card-body">
+		<div class="card-header">This bus is out of service</div>
+		<div class="card-body">
 			<h5 class="card-title">{{result.name}}</h5>
 			<p >This Stop services routes: </p>
 			<span v-for="route in result.route_id ">

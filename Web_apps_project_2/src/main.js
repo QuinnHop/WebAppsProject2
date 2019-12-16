@@ -359,7 +359,8 @@ app = new Vue({
         searchResults(){
             app.visibleResults = [];
             for(let i = 0; i < app.results.length; i++){
-                let title = app.results[i].name;
+                let temp = app.results[i].name;
+                let title = temp.toLowerCase();
                 if(title.includes(app.searchQuery))
                     app.visibleResults.push(app.results[i]);
                 
@@ -384,6 +385,7 @@ app = new Vue({
                 allSearched += ", ";
             }
             localStorage.setItem("PreviousSearches", allSearched);
+            app.searchQuery = "";
         }
     }, 
     created(){

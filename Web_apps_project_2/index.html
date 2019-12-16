@@ -36,13 +36,13 @@
   <body>
     <img src="./spinningwheel.gif" id="loading" alt="Loading Icon">
       <div class="row">
-        <div class="col-lg">
+        <div class="col-lg-4">
           <div id="map"></div>
         </div> 
         
         <div id="app" class="col-lg-7">
           <div class="row">
-            <div class="col-lg-6">
+            <div class="col-lg-7">
               <section>
                 <h2>Choose your route, search distance, and press the button to find the closest stop to you!</h2>
                 <p>
@@ -51,11 +51,8 @@
                       {{ option.text }}
                     </option>
                   </select>
-                  <select v-model="searchRadius" @change="getAgencies">Search Radius: 
-                    <option id="small" value="1000">1000 Meters</option>
-                    <option id="medium" value="2000">2000 Meters</option>
-                    <option id="large" value="5000">5000 meters</option>
-                  </select>
+                  <input name="weight" type="range" id="range_weight" value="1000" v-model="searchRadius" min="1000" max="5000" step="500" class="slider" @change="getAgencies" oninput="range_weight_disp.value = range_weight.value">
+                  <output id="range_weight_disp"></output>
                   <button @click="locate">FIND!</button>
                 </p>
                 <div v-if="searched">
@@ -65,7 +62,7 @@
                 </div>
               </section>
             </div>
-            <div class="col-lg-6">
+            <div class="col-lg-5" id="container">
               <h2>Results</h2>
               <div id="resultBox" v-for="result in visibleResults" class="row">
                 <bus-result-success v-bind:result="result"></bus-result-success>      
