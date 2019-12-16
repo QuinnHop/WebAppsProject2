@@ -8,11 +8,12 @@ export default Vue.component('bus-result-success',{
 	text-variant="white"
 	class="col-lg-4"
 	>
-		<div style="margin-right:2em;" class="card-header">Arriving at: {{result.arrivalTime}}</div>
-		<div style="margin-right:2em;" class="card-body">
+		<div class="card-header">Arriving at: {{result.arrivalTime}}</div>
+		<div class="card-body">
 			<h5 class="card-title">{{result.name}}</h5>
-			<p class="card-text>This Stop services routes: </p>
+			<p class="card-text">This stop services routes: </p>
 			<span class="card-text" v-for="route in result.route_id">
+				{{route.text}}
     			<span>, </span>
 			</span>
 		</div>
@@ -23,11 +24,12 @@ export default Vue.component('bus-result-success',{
 	text-variant="white"
 	class="col-lg-4"
 	>
-		<div style="margin-right:2em;" class="card-header">Arriving at: {{result.arrivalTime}}</div>
-		<div style="margin-right:2em;" class="card-body">
+		<div class="card-header">Arriving at: {{result.arrivalTime}}</div>
+		<div class="card-body">
 			<h5 class="card-title">{{result.name}}</h5>
-			<p class="card-text>This Stop services routes: </p>
+			<p class="card-text">This stop services routes: </p>
 			<span class="card-text" v-for="route in result.route_id">
+				{{route.text}}
 				<span>, </span>
 			</span>
 		</div>
