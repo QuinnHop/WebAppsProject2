@@ -21,7 +21,12 @@ app = new Vue({
             {text: 'RIT Inn', value: '-77.658830, 43.046110'},
             {text: 'Province', value: '-77.660162, 43.077429'},
             {text: 'Current Location', value: 'current'}
-        ]
+        ],
+        searched: false,
+        searchQuery: "",
+        lastQuery: "",
+        searchedTerms: [],
+        visibleResults: []
     },
     methods: {
         // This is used to get a selected location's value and fly to it
@@ -47,9 +52,11 @@ app = new Vue({
             firebase.database().ref('users').push({
                 accessDate: `${d.getDate()}/${d.getMonth()}/${d.getFullYear()}`,
                 position: `${location[0]}, ${location[1]}`,
-                seachRadius: app.searchRadius
+                seachRadius: app.searchRadius,
+                searchedTerms: localStorage.getItem("PreviousSearches")
             });
-
+            
+            app.searched =true;
             app.getAgencies(location, app.searchRadius);
         },
         initMap(){
@@ -88,6 +95,8 @@ app = new Vue({
                     center: [location[1], location[0]],
                     zoom: 15
                 });
+
+                app.lastQuery = localStorage.getItem("LastTerm");
 
                 app.getAgencies(location, app.searchRadius);
             }
@@ -281,6 +290,9 @@ app = new Vue({
                         app.results[i].isRunning = true;
 
                     console.log(app.results[i].arrivalTime);
+                    app.visibleResults = app.results;
+
+                    app.lastQuery = localStorage.getItem("LastTerm");
                 }
             })
             .catch(err => {
@@ -342,6 +354,36 @@ app = new Vue({
 
             this.getArrivalTimes();
             console.log(app.results);
+        },
+        //given a search term loop through the results and adds any included results to the visibleResults
+        searchResults(){
+            app.visibleResults = [];
+            for(let i = 0; i < app.results.length; i++){
+                let title = app.results[i].name;
+                if(title.includes(app.searchQuery))
+                    app.visibleResults.push(app.results[i]);
+                
+            }
+            //check local storage for previous searches
+            let string = localStorage.getItem("PreviousSearches");
+            if(string){
+                app.searchedTerms = string.split(", ");
+            }
+            else{//No previous searches have been stored
+                app.searchedTerms = [];
+            }
+           
+            //store the search term locally
+            app.searchedTerms.push(app.searchQuery);
+            localStorage.setItem("LastTerm", app.searchQuery);
+            app.lastQuery = app.searchQuery;
+
+            let allSearched = "";
+            for(let i = 0; i < app.searchedTerms.length; i++){
+                allSearched += app.searchedTerms[i];
+                allSearched += ", ";
+            }
+            localStorage.setItem("PreviousSearches", allSearched);
         }
     }, 
     created(){
@@ -360,17 +402,10 @@ app = new Vue({
       };
       // Initialize Firebase
       firebase.initializeApp(firebaseConfig);
-      console.log(firebase); // #3 - make sure firebase is loaded
-      //update the firebase server
-      let data = {
-        accessDate: `${d.getMonth()+1}/${d.getDate()}/${d.getFullYear()}`,
-        position: `2, 3`,
-        seachRadius: "3"
-      };
-      firebase.database().ref('users').push(data);
-          
-            
-     }
+      console.log(firebase); // #3 - make sure firebase is loaded    
+      
+      
+    }
 });
 }
 

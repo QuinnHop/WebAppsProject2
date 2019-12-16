@@ -57,11 +57,16 @@
                   </select>
                   <button @click="locate">FIND!</button>
                 </p>
+                <div v-if="searched">
+                  <p>Search through the results</p>
+                  <input type="search" :placeholder="lastQuery" v-model="searchQuery" >
+                  <button @click="searchResults">Filter!</button>
+                </div>
               </section>
             </div>
             <div class="col-lg-6">
               <h2>Results</h2>
-              <div id="resultBox" v-for="result in results" class="row">
+              <div id="resultBox" v-for="result in visibleResults" class="row">
                 <bus-result-success v-bind:result="result"></bus-result-success>      
               </div>
             </div>
