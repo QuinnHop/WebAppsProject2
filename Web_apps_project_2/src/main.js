@@ -409,7 +409,8 @@ app = new Vue({
       // Initialize Firebase
       firebase.initializeApp(firebaseConfig);
       console.log(firebase); // #3 - make sure firebase is loaded    
-      
+      if(localStorage.getItem("PreviousSearches") == null)
+        localStorage.setItem("PreviousSearches", "");
       
     }
 });

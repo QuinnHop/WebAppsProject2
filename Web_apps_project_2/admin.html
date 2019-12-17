@@ -2,28 +2,8 @@
 <html lang="en">
 <head>
 	<meta charset="utf-8" />
-	<title>Firebase Admin</title>
-</head>
-<body>
-<div id="app">
-   <h1>User Data</h1>
-    <h1 id="usersArea">Users:</h1>
-    <ol  v-for="user in users">
-        <li>
-            <div >
-                <h3>User: </h3>
-                <p>Access Date: {{user.accessDate}} </p>
-                <p>Position: {{user.position}}</p>
-                <p>Search Radius: {{user.seachRadius}} Meters</p>
-                <p>Searched Terms: {{user.searchedTerms}}</p>
-            </div>
-        </li>
-
-    </ol>
-</div>
-
-
-<!-- #1 - link to Firebase goes here  -->
+    <title>Firebase Admin</title>
+    <!-- #1 - link to Firebase goes here  -->
 <!-- The core Firebase JS SDK is always required and must be listed first -->
 
 <script src="https://www.gstatic.com/firebasejs/7.6.0/firebase-app.js"></script>
@@ -37,7 +17,31 @@
 
 <!-- development version, includes helpful console warnings -->
 <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
-<script type="module"></script>
+
+<link rel="stylesheet" href="./adminStyles.css">
+</head>
+<body>
+<div id="app">
+   <h1>User Data</h1>
+   <div class="card text-white bg-primary mb-3" style="max-width: 18rem;">
+        <h1 id="usersArea">Users:</h1>
+        <ol  >
+            <li v-for="user in users">
+                <div >
+                    <h3>User: </h3>
+                    <p>Access Date: {{user.accessDate}} </p>
+                    <p>Position: {{user.position}}</p>
+                    <p>Search Radius: {{user.seachRadius}} Meters</p>
+                    <p v-if="user.searchedTerms">Searched Terms: {{user.searchedTerms}}</p>
+                
+                    
+                </div>
+            </li>
+        </ol>
+   </div>
+    
+</div>
+
 <script>
     
     
@@ -45,8 +49,8 @@
         el: '#app',
         data: {
             users: [],
-            uniqueWords: [],
-            wordCounts: []
+            words: []
+            
         },
         methods:{
             dataChanged(data){
@@ -62,46 +66,20 @@
             },
             formatUsers(){
                 // 1- create an array of words from the loaded string
-                let bigString;
-                for(let i = 0; i < app.users.length; i++){
-                    bigString += app.users.searchedTerms;
-                }
-                let counts = {};
-                // 2 - loop through array:
-
-                    for(let w of words){
-                        w = w.toLowerCase();
-                    //count up frequency of each word and store values in a dictionary (i.e. Object)
-                        if(counts[w] == undefined)
-                        counts[w] = 1;
-                        else
-                        counts[w]++;
-                    }
-                    
                 
+                for(let i = 0; i < app.users.length; i++){
 
-                // 3 - grab keys of dictionary and sort them by frequency of their "count" in the dictionary
-                let keys = Object.keys(counts);
+                
+                if(app.users[i].searchedTerms == null)//user has entered no search terms 
+                    return;
+                let searchedWords = app.users[i].searchedTerms.split(", ");
+                
+                let unique = [...new Set(searchedWords)];
+                console.log(unique);
+                app.users[i].searchedTerms = unique;
 
-                keys.sort((a, b) =>{
-                    let countA = counts[a];
-                    let countB = counts[b];
-
-                    return countB - countA;
-                });
-                // 4 - loop through sorted keys and display frequency of each word on page
-
-                let numElements = 10;
-                if(numElements >= keys.length){
-                    numElements = keys.length;
                 }
-                keys = keys.slice(0, numElements);
-
-                for(let k of keys){
-                    let p = document.createElement("p")
-                    p.innerHTML = `${k} : ${counts[k]}`;
-                    keywords.appendChild(p);
-                }
+                console.log(app.words);
             }
         },
         created(){
