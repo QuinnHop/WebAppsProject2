@@ -32,12 +32,15 @@ app = new Vue({
     methods: {
         // This is used to get a selected location's value and fly to it
         locate(){
+
+            //location can either be gotten from the users current location
             let value = this.selected;
             if(value == "current"){
                 location[0] = current[1];
                 location[1] = current[0];
             }
 
+            //or one of the preset locations
             else{
                 let array = value.split(",");
                 location[0] = parseFloat(array[0]);
@@ -50,6 +53,7 @@ app = new Vue({
                 zoom: 15
             });
             
+            //Since this is one of the first steps the program reaches, this is where the information is pushed to the database
             firebase.database().ref('users').push({
                 accessDate: `${d.getDate()}/${d.getMonth()}/${d.getFullYear()}`,
                 position: `${location[0]}, ${location[1]}`,
@@ -57,7 +61,9 @@ app = new Vue({
                 searchedTerms: localStorage.getItem("PreviousSearches")
             });
             
-            app.searched =true;
+
+            app.searched = true;
+            //get the agencies in the area
             app.getAgencies(location, app.searchRadius);
         },
         initMap(){
@@ -84,10 +90,7 @@ app = new Vue({
             function success(pos) {
                 let crd = pos.coords;
               
-                console.log('Your current position is:');
-                console.log(`Latitude : ${crd.latitude}`);
-                console.log(`Longitude: ${crd.longitude}`);
-                console.log(`More or less ${crd.accuracy} meters.`);
+                
                 location[0] = [crd.latitude];
                 location[1] =  [crd.longitude];
                 current[0] = location[0];
@@ -105,11 +108,13 @@ app = new Vue({
             function error(err) {
                 console.warn(`ERROR(${err.code}): ${err.message}`);
             }
-              
+            
+            //gets the current position of the user
             navigator.geolocation.getCurrentPosition(success, error, options);
 
         },
         
+        //this function will find all the active routes in the area with the given agencies
         getRouteData(){
             let url = `https://transloc-api-1-2.p.rapidapi.com/stops.json?&callback=call&geo_area=${location[1]},${location[0]}|${this.searchRadius}&agencies=`;
             
@@ -131,7 +136,8 @@ app = new Vue({
             return response.json();
         })
         .then((responseData) =>{
-            //console.log(responseData);
+            
+            //from here it creates the visual markers for the stops and generates the stops
             app.createMarkers(responseData.data);
             app.generateResults(responseData);
         })
@@ -157,16 +163,15 @@ app = new Vue({
         .then((responseData) =>{
             agencies = [];//clear agencies list
             if(responseData.data.length == 0) {
-                console.log("no agencies within bounds"); 
+               
                 return;
             }
             //add all the agencies retreived from the location
             for(let i =0; i < responseData.data.length; i++){
-                //IMPORTANT: agency_id isn't actually a property, long_name will give us the agency (RIT) but then the program doesn't work
-                //for the time being just keep this part broken, we can fix it later
-
+                
                 agencies.push(responseData.data[i].agency_id); 
             }
+            //call the getRouteData function to find the stops
             app.getRouteData(location, app.searchRadius);
             app.loadVisible = false;
         })
@@ -175,6 +180,7 @@ app = new Vue({
         });
         },
 
+        //arrival times uses the stops and finds their arrival times for the next bus
         getArrivalTimes(){
             let url = "https://transloc-api-1-2.p.rapidapi.com/arrival-estimates.json?routes=";
             // Add the routes
@@ -225,7 +231,7 @@ app = new Vue({
             })
 
             .then(response => {
-                console.log(response);
+                
                 return response.json();
             })
             .then((responseData) =>{
@@ -292,7 +298,7 @@ app = new Vue({
                     else
                         app.results[i].isRunning = true;
 
-                    console.log(app.results[i].arrivalTime);
+                    
                     app.visibleResults = app.results;
 
                     app.lastQuery = localStorage.getItem("LastTerm");
@@ -303,7 +309,7 @@ app = new Vue({
             	console.log(err);
             });
         },
-
+        //creates the markers on the map
         createMarkers(data){
             // Clear all markers
             $( ".marker" ).remove();
@@ -330,7 +336,7 @@ app = new Vue({
             // add markers to map
             while(markers.length > 0) {
                 let marker = markers.pop();
-                //console.log(marker.features[0].properties.title);
+                
                 // create a HTML element for each feature
                 var el = document.createElement('div');
                 el.className = 'marker';
@@ -343,8 +349,9 @@ app = new Vue({
                 .addTo(map);
             }
         },
+        //takes info from generateRoutes and creates new result objects for data
         generateResults(routeObject){
-            console.log(routeObject);
+          
             app.results = [];
             for(let i = 0; i < routeObject.data.length; i++){
                 let newResult = new result();
@@ -355,9 +362,9 @@ app = new Vue({
                 
                 app.results.push(newResult);
             }
-
+            //gets the arrival times of the newly created stops
             this.getArrivalTimes();
-            console.log(app.results);
+            
         },
         //given a search term loop through the results and adds any included results to the visibleResults
         searchResults(){
@@ -408,7 +415,7 @@ app = new Vue({
       };
       // Initialize Firebase
       firebase.initializeApp(firebaseConfig);
-      console.log(firebase); // #3 - make sure firebase is loaded    
+      
       if(localStorage.getItem("PreviousSearches") == null)
         localStorage.setItem("PreviousSearches", "");
       

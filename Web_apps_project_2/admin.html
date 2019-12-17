@@ -26,17 +26,18 @@
 </head>
 <body>
 <div id="app">
-   <h1>User Data</h1>
-   <div class="card text-white bg-primary mb-3" style="max-width: 18rem;">
-        <h1 id="usersArea">Users:</h1>
-        <ol  >
-            <li v-for="user in users">
-                <div >
-                    <h3>User: </h3>
-                    <p>Access Date: {{user.accessDate}} </p>
-                    <p>Position: {{user.position}}</p>
-                    <p>Search Radius: {{user.seachRadius}} Meters</p>
-                    <p v-if="user.searchedTerms">Searched Terms: {{user.searchedTerms}}</p>
+   
+   <div style="margin-left:auto; margin-right:auto; left:0; right:0;" class="col-xs-1" align="center">
+    <h1>User Data</h1>
+        <h3 id="usersArea">Users:</h3>
+        <ol >
+            <li class="card text-white bg-primary mb-3" style="max-width: 50%;" v-for="user in users">
+                <div  >
+                    <h5>User: </h5>
+                    <p><b>Access Date:</b> {{user.accessDate}} </p>
+                    <p><b>Position:</b> {{user.position}}</p>
+                    <p><b>Search Radius:</b> {{user.seachRadius}} Meters</p>
+                    <p v-if="user.searchedTerms"><b>Searched Terms:</b> {{user.searchedTerms}}</p>
                 
                     
                 </div>
@@ -79,11 +80,11 @@
                 let searchedWords = app.users[i].searchedTerms.split(", ");
                 
                 let unique = [...new Set(searchedWords)];
-                console.log(unique);
+                
                 app.users[i].searchedTerms = unique;
 
                 }
-                console.log(app.words);
+                
             }
         },
         created(){
@@ -99,7 +100,7 @@
             };
                 // Initialize Firebase
             firebase.initializeApp(firebaseConfig);
-            console.log(firebase); // #3 - make sure firebase is loaded
+            
             
         }
 });
