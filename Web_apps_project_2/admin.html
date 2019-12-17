@@ -8,13 +8,14 @@
 <div id="app">
    <h1>User Data</h1>
     <h1 id="usersArea">Users:</h1>
-    <ol id="scoresList" v-for="user in users">
+    <ol  v-for="user in users">
         <li>
-            <div>
+            <div >
                 <h3>User: </h3>
-                <p>Access Date: {user.accessDate}</p>
-                <p>Position: {user.position}</p>
-                <p>Search Radius: {user.searchRadius}</p>
+                <p>Access Date: {{user.accessDate}} </p>
+                <p>Position: {{user.position}}</p>
+                <p>Search Radius: {{user.seachRadius}} Meters</p>
+                <p>Searched Terms: {{user.searchedTerms}}</p>
             </div>
         </li>
 
@@ -39,11 +40,69 @@
 <script type="module"></script>
 <script>
     
-    let Users = [];
+    
     let app = new Vue({
         el: '#app',
         data: {
-            users: []
+            users: [],
+            uniqueWords: [],
+            wordCounts: []
+        },
+        methods:{
+            dataChanged(data){
+                let obj = data.val();
+                    
+                Object.keys(obj).forEach(function (item) {
+                app.users.push(obj[item]);
+                });
+                app.formatUsers();
+            },
+            firebaseError(error){
+                console.log(error);
+            },
+            formatUsers(){
+                // 1- create an array of words from the loaded string
+                let bigString;
+                for(let i = 0; i < app.users.length; i++){
+                    bigString += app.users.searchedTerms;
+                }
+                let counts = {};
+                // 2 - loop through array:
+
+                    for(let w of words){
+                        w = w.toLowerCase();
+                    //count up frequency of each word and store values in a dictionary (i.e. Object)
+                        if(counts[w] == undefined)
+                        counts[w] = 1;
+                        else
+                        counts[w]++;
+                    }
+                    
+                
+
+                // 3 - grab keys of dictionary and sort them by frequency of their "count" in the dictionary
+                let keys = Object.keys(counts);
+
+                keys.sort((a, b) =>{
+                    let countA = counts[a];
+                    let countB = counts[b];
+
+                    return countB - countA;
+                });
+                // 4 - loop through sorted keys and display frequency of each word on page
+
+                let numElements = 10;
+                if(numElements >= keys.length){
+                    numElements = keys.length;
+                }
+                keys = keys.slice(0, numElements);
+
+                for(let k of keys){
+                    let p = document.createElement("p")
+                    p.innerHTML = `${k} : ${counts[k]}`;
+                    keywords.appendChild(p);
+                }
+            }
         },
         created(){
             /* #2 - The rest of the Firebase setup code goes here */
@@ -59,29 +118,11 @@
                 // Initialize Firebase
             firebase.initializeApp(firebaseConfig);
             console.log(firebase); // #3 - make sure firebase is loaded
-                
-            // #4 This is where the magic happens!
-            firebase.database().ref("users").on("value", dataChanged, firebaseError);
             
-            function dataChanged(data){
-                let obj = data.val();
-                
-                Object.keys(obj).forEach(function (item) {
-                Users.push(obj[item]);
-                });
-                
-            
-            }
-        
-                
-            function firebaseError(error){
-                console.log(error);
-            }
-            app.data.users = Users;
         }
 });
 
-
+firebase.database().ref("users").on("value", app.dataChanged, app.firebaseError);
     
 
     

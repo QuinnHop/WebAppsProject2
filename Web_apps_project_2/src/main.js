@@ -26,7 +26,8 @@ app = new Vue({
         searchQuery: "",
         lastQuery: "",
         searchedTerms: [],
-        visibleResults: []
+        visibleResults: [],
+        loadVisible: false
     },
     methods: {
         // This is used to get a selected location's value and fly to it
@@ -112,7 +113,7 @@ app = new Vue({
         getRouteData(){
             let url = `https://transloc-api-1-2.p.rapidapi.com/stops.json?&callback=call&geo_area=${location[1]},${location[0]}|${this.searchRadius}&agencies=`;
             
-        
+            
             for(let i = 0; i < agencies.length; i++){
                 url+= agencies[i];
             
@@ -142,6 +143,7 @@ app = new Vue({
         //this will allow you to get the agencies functioning in the area
         //35.80176, -78.64347 |75.5
         getAgencies(){
+            app.loadVisible = true;
             fetch(`https://transloc-api-1-2.p.rapidapi.com/agencies.json?callback=call&geo_area=${location[1]},${location[0]}|${this.searchRadius}`, {
             "method": "GET",
             "headers": {
@@ -166,6 +168,7 @@ app = new Vue({
                 agencies.push(responseData.data[i].agency_id); 
             }
             app.getRouteData(location, app.searchRadius);
+            app.loadVisible = false;
         })
         .catch(err => {
             console.log(err);
@@ -293,6 +296,7 @@ app = new Vue({
                     app.visibleResults = app.results;
 
                     app.lastQuery = localStorage.getItem("LastTerm");
+                    
                 }
             })
             .catch(err => {
@@ -361,7 +365,7 @@ app = new Vue({
             for(let i = 0; i < app.results.length; i++){
                 let temp = app.results[i].name;
                 let title = temp.toLowerCase();
-                if(title.includes(app.searchQuery))
+                if(title.includes(app.searchQuery.toLowerCase()))
                     app.visibleResults.push(app.results[i]);
                 
             }

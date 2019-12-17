@@ -34,13 +34,14 @@
    <link rel="stylesheet" href="./style.css">
   </head>
   <body>
-    <img src="./spinningwheel.gif" id="loading" alt="Loading Icon">
+    
       <div class="row">
         <div class="col-lg-4">
           <div id="map"></div>
         </div> 
         
         <div id="app" class="col-lg-7">
+          
           <div class="row">
             <div class="col-lg-7">
               <section>
@@ -64,6 +65,7 @@
             </div>
             <div class="col-lg-5" id="container">
               <h2>Results</h2>
+              <h4 v-show="loadVisible"><i>Loading...</i></h4>
               <div id="resultBox" v-for="result in visibleResults" class="row">
                 <bus-result-success v-bind:result="result"></bus-result-success>      
               </div>
